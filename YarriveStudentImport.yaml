@@ -1,0 +1,179 @@
+swagger: "2.0"
+info:
+  description: "This is a documentation of the external student import API for [Yarrive](https://yarrive.com)."
+  version: "1.0.0"
+  title: "Yarrive Student Import"
+host: "admin.yarrive.com"
+basePath: "/api/external"
+tags:
+- name: "courses"
+  description: "Provides information about courses"
+- name: "students"
+  description: "Provides endpoints to import students"
+schemes:
+- "https"
+security: 
+  - api_key: []
+paths:
+  /courses:
+    get:
+      tags:
+      - "courses"
+      summary: "List available courses"
+      description: "Returns a list of all courses the current tenant can access."
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CoursesResponse"
+        "500":
+          description: "error response"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /students:
+    post:
+      tags:
+      - "students"
+      summary: "Import students"
+      description: "Muliple students can be imported at once. Returns a return status for each student."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description:
+          List of students to import. email and courses fields are required.
+          courseId can be retrieved by using the GET /courses endpoint.
+          If the given courseGroup does not exist yet, then it will be created.
+        required: true
+        schema:
+          type: "object"
+          properties:
+            students:
+              type: array
+              items:
+                $ref: "#/definitions/StudentImport"
+
+      responses:
+        "200":
+          description:
+            Successful operation, returns a separate success flag for each student.
+            error and errorDetails are only sent if success=false.
+          schema:
+            $ref: "#/definitions/StudentImportResponse"
+        "500":
+          description: "error response"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "X-Api-Key"
+    in: "header"
+    description:
+      Retrieve an API key for your tenant in the yarrive admin interface.
+      This API key must be sent for each request and will define which tenant
+      will be assigned to the imported student.
+definitions:
+  CoursesResponse:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      courses:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              example: 1
+            title:
+              type: "string"
+              example: "Basismodul"
+  StudentImport:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      firstName:
+        type: "string"
+        example: "Max"
+      lastName:
+        type: "string"
+        example: "Mustermann"
+      zipCode:
+        type: "string"
+        example: "8020"
+      city:
+        type: "string"
+        example: "Graz"
+      state:
+        type: "string"
+        example: "Steiermark"
+      country:
+        type: "string"
+        example: "at"
+        description: "two-letter country code (ISO 3166-1 alpha-2)"
+      birthDate:
+        type: "string"
+        format: "date"
+      courses:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            courseId:
+              type: "integer"
+              example: 1
+            courseGroup:
+              type: "string"
+              example: "Märzgruppe 2022"
+          required:
+            - courseId
+            - courseGroup
+    required:
+      - email
+      - courses
+  StudentImportResponse:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      students:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              format: "email"
+            success:
+              type: "boolean"
+              example: false
+            error:
+              type: "string"
+              enum:
+                - ERR_COURSE_NOT_FOUND
+                - ERR_VALIDATION_FAILED
+                - ERR_UNKNOWN
+            errorDetails:
+              type: "string"
+              example: "Course 1 does not exist"
+  ErrorResponse:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      error:
+        type: "string"
+        example: "ERR_UNKNOWN"
+      message: 
+        type: "string"
+        example: "An unknown error occurred"
+      
