@@ -163,14 +163,14 @@ definitions:
             courseGroup:
               type: "string"
               example: "Märzgruppe 2022"
-            startDate:
+            courseGroupStartDate:
               type: "string"
               format: "date"
-              description: "Start date of the given course group if it does not exist yet"
-            endDate:
+              description: "Start date of the given course group"
+            courseGroupEndDate:
               type: "string"
               format: "date"
-              description: "End date of the given course group if it does not exist yet"
+              description: "End date of the given course group"
           required:
             - courseId
             - courseGroup
