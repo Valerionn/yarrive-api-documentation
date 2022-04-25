@@ -38,7 +38,7 @@ paths:
       tags:
       - "students"
       summary: "Import students"
-      description: "Muliple students can be imported at once. Returns a return status for each student.\n\n
+      description: "Multiple students can be imported at once. Returns a return status for each student.\n\n
       **General errors** (Response code 500, `error` + `message` provided)\n
       * `ERR_MISSING_KEY`\n
       * * X-Api-Key header missing\n
@@ -68,7 +68,7 @@ paths:
       - in: "body"
         name: "body"
         description:
-          List of students to import. email and courses fields are required.
+          List of students to import. email, birthDate and courses fields are required.
           courseId can be retrieved by using the GET /courses endpoint.
           If the given courseGroup does not exist yet, then it will be created.
         required: true
