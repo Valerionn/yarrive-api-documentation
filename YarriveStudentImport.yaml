@@ -12,7 +12,7 @@ tags:
   description: "Provides endpoints to import students"
 schemes:
 - "https"
-security: 
+security:
   - api_key: []
 paths:
   /courses:
@@ -38,7 +38,30 @@ paths:
       tags:
       - "students"
       summary: "Import students"
-      description: "Muliple students can be imported at once. Returns a return status for each student."
+      description: "Muliple students can be imported at once. Returns a return status for each student.\n\n
+      **General errors** (Response code 500, `error` + `message` provided)\n
+      * `ERR_MISSING_KEY`\n
+      * * X-Api-Key header missing\n
+      * `ERR_INVALID_KEY`\n
+      * * Invalid Api-Key: No User/Tenant found for provided Api-Key. Please check the key or generate a new one.\n
+      * * Invalid Api-Key: User who is owner of provided Api-Key is disabled.\n
+      
+      **Student specific errors** (`error` + `errorDetails` per student)\n
+      * `ERR_BAD_EMAIL`\n
+      * * Email validation failed\n
+      * `ERR_STUDENT_VALIDATION_FAILED`\n
+      * * Duplicate student because of duplicate email within import data\n
+      * * Duplicate course <id>. Student can only join one group within a course.\n
+      * * Student is already in existing course group <name> in course <id>. Student can only join one group within a course.\n
+      * * Bad birthdate format. Please make sure it is DD.MM.YYYY\n
+      * * Duplicate course group within student\n
+      * * Bad start-date format for group <name> in course <id>. Please make sure it is DD.MM.YYYY\n
+      * * Bad end-date format for group <name> in course <id>. Please make sure it is DD.MM.YYYY\n
+      * * End-date before start-date for group <name> in course <id>\n
+      * * At least one course must be provided!\n
+      * * Courses with Ids <ids> do not exist or are archived\n
+      * * Student is already in course group <name> in course <id>\n
+      "
       produces:
       - "application/json"
       parameters:
@@ -133,12 +156,21 @@ definitions:
             courseGroup:
               type: "string"
               example: "Märzgruppe 2022"
+            startDate:
+              type: "string"
+              format: "date"
+              description: "Start date of the given course group if it does not exist yet"
+            endDate:
+              type: "string"
+              format: "date"
+              description: "End date of the given course group if it does not exist yet"
           required:
             - courseId
             - courseGroup
     required:
       - email
       - courses
+      - birthDate
   StudentImportResponse:
     type: "object"
     properties:
@@ -158,9 +190,9 @@ definitions:
             error:
               type: "string"
               enum:
-                - ERR_COURSE_NOT_FOUND
-                - ERR_VALIDATION_FAILED
-                - ERR_UNKNOWN
+                - ERR_BAD_EMAIL
+                - ERR_STUDENT_VALIDATION_FAILED
+                - ERR_STUDENT_IMPORT_FAILED
             errorDetails:
               type: "string"
               example: "Course 1 does not exist"
@@ -172,8 +204,10 @@ definitions:
         example: false
       error:
         type: "string"
-        example: "ERR_UNKNOWN"
-      message: 
+        enum:
+          - ERR_MISSING_KEY
+          - ERR_INVALID_KEY
+          - ERR_UNKNOWN
+      message:
         type: "string"
-        example: "An unknown error occurred"
-      
+        example: "X-Api-Key header missing"
