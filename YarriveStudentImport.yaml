@@ -28,7 +28,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/CoursesResponse"
-        "500":
+        "400":
           description: "error response"
           schema:
             $ref: "#/definitions/ErrorResponse"
@@ -87,7 +87,7 @@ paths:
             error and errorDetails are only sent if success=false.
           schema:
             $ref: "#/definitions/StudentImportResponse"
-        "500":
+        "400":
           description: "error response"
           schema:
             $ref: "#/definitions/ErrorResponse"
