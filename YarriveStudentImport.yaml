@@ -57,10 +57,10 @@ paths:
       * * Duplicate student because of duplicate email within import data\n
       * * Duplicate course <id>. Student can only join one group within a course.\n
       * * Student is already in existing course group <name> in course <id>. Student can only join one group within a course.\n
-      * * Bad birthdate format. Please make sure it is DD.MM.YYYY\n
+      * * Bad birthdate format. Please make sure it is YYYY-MM-DD\n
       * * Duplicate course group within student\n
-      * * Bad start-date format for group <name> in course <id>. Please make sure it is DD.MM.YYYY\n
-      * * Bad end-date format for group <name> in course <id>. Please make sure it is DD.MM.YYYY\n
+      * * Bad start-date format for group <name> in course <id>. Please make sure it is YYYY-MM-DD\n
+      * * Bad end-date format for group <name> in course <id>. Please make sure it is YYYY-MM-DD\n
       * * End-date before start-date for group <name> in course <id>\n
       * * At least one course must be provided!\n
       * * Courses with Ids <ids> do not exist or are archived\n
