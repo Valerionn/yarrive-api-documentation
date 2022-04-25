@@ -44,9 +44,8 @@ paths:
       summary: "Import students"
       description: "Multiple students can be imported at once. Returns a return status for each student.\n\n
       **General errors** (Response code 500, `error` + `message` provided)\n
-      * `ERR_MISSING_KEY`\n
+      * `ERR_NO_PERMISSION`\n
       * * X-Api-Key header missing\n
-      * `ERR_INVALID_KEY`\n
       * * Invalid Api-Key: No User/Tenant found for provided Api-Key. Please check the key or generate a new one.\n
       * * Invalid Api-Key: User who is owner of provided Api-Key is disabled.\n
       
@@ -213,8 +212,7 @@ definitions:
       error:
         type: "string"
         enum:
-          - ERR_MISSING_KEY
-          - ERR_INVALID_KEY
+          - ERR_NO_PERMISSION
       message:
         type: "string"
         example: "X-Api-Key header missing"
