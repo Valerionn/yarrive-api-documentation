@@ -20,7 +20,7 @@ paths:
       tags:
       - "courses"
       summary: "List available courses"
-      description: "Returns a list of all courses the current tenant can access."
+      description: "Returns a list of all courses the current tenant can access. See student import endpoint below for a list of all possible general issues"
       produces:
       - "application/json"
       responses:
@@ -28,10 +28,14 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/CoursesResponse"
-        "400":
+        "403":
           description: "error response"
           schema:
             $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "server error response"
+          schema:
+            $ref: "#/definitions/ErrorResponseServer"
 
   /students:
     post:
@@ -87,10 +91,14 @@ paths:
             error and errorDetails are only sent if success=false.
           schema:
             $ref: "#/definitions/StudentImportResponse"
-        "400":
+        "403":
           description: "error response"
           schema:
             $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "server error response"
+          schema:
+            $ref: "#/definitions/ErrorResponseServer"
 securityDefinitions:
   api_key:
     type: "apiKey"
@@ -207,7 +215,19 @@ definitions:
         enum:
           - ERR_MISSING_KEY
           - ERR_INVALID_KEY
-          - ERR_UNKNOWN
       message:
         type: "string"
         example: "X-Api-Key header missing"
+  ErrorResponseServer:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      error:
+        type: "string"
+        enum:
+          - ERR_UNKNOWN
+      message:
+        type: "string"
+        example: "An unknown server error occured"
