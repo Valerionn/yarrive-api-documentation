@@ -53,17 +53,22 @@ paths:
       * `ERR_BAD_EMAIL`\n
       * * Email validation failed\n
       * `ERR_STUDENT_VALIDATION_FAILED`\n
-      * * Duplicate student because of duplicate email within import data\n
-      * * Duplicate course <id>. Student can only join one group within a course.\n
-      * * Student is already in existing course group <name> in course <id>. Student can only join one group within a course.\n
+      * * Student at Index <index> has no email address. Email address must be provided.\n
+      * * Duplicate student because of duplicate email within import data.\n
+      * * Birthdate must be provided.\n
       * * Bad birthdate format. Please make sure it is YYYY-MM-DD\n
-      * * Duplicate course group within student\n
+      * * At least one course must be provided.\n
+      * * courseId must be provided.\n
+      * * courseGroup must be provided.\n
+      * * Duplicate course <id>. Student can only join one group within a course.\n
       * * Bad start-date format for group <name> in course <id>. Please make sure it is YYYY-MM-DD\n
       * * Bad end-date format for group <name> in course <id>. Please make sure it is YYYY-MM-DD\n
-      * * End-date before start-date for group <name> in course <id>\n
-      * * At least one course must be provided!\n
-      * * Courses with Ids <ids> do not exist or are archived\n
-      * * Student is already in course group <name> in course <id>\n
+      * * End-date before start-date for group <name> in course <id>.\n
+      * * Courses with Ids <ids> do not exist or are archived.\n
+      * * Student is already in course group <name> in course <id>.\n
+      * * Student is already in existing course group <name> in course <id>. Student can only join one group within a course.\n
+      * `ERR_STUDENT_IMPORT_FAILED`\n
+      * * Unexpected import error\n
       "
       produces:
       - "application/json"
